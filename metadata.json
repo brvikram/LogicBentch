@@ -1,0 +1,6 @@
+{
+  "name": "LogicBench",
+  "description": "Virtual Digital Electronics Trainer Laboratory replicating the DT-1004 universal digital trainer with 25 authentic TTL/CMOS/SRAM ICs, physical patch cords, solderless breadboard, and event-driven simulation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

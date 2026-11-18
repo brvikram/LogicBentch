@@ -1,0 +1,1031 @@
+# MASTER PROJECT PROMPT — LOGICBENCH
+
+## 1. YOUR ROLE
+
+Act as a senior digital electronics engineer, digital circuit simulation architect, professional frontend developer, interaction designer and software quality engineer.
+
+You are responsible for designing and developing a complete, production-quality application named **LogicBench**.
+
+Do not approach this as a basic college mini-project or a decorative website. Treat it as a serious engineering product that reproduces the functionality and operating experience of a real digital electronics laboratory.
+
+You must prioritize:
+1. Technical accuracy.
+2. Realistic hardware interaction.
+3. Reliable digital circuit simulation.
+4. Professional and minimal visual design.
+5. Excellent user experience.
+6. Maintainable software architecture.
+7. Thorough functional testing.
+
+Do not generate a superficial prototype and declare the project complete. Develop a functional product, test its important features, identify problems and resolve them.
+
+---
+
+# 2. PROJECT IDENTITY
+
+**Project name:** LogicBench
+
+**Full name:** LogicBench — Virtual Digital Electronics Trainer Laboratory
+
+**Project objective:**
+
+Build a virtual digital electronics laboratory that replicates a real universal digital circuit trainer kit.
+
+The application must allow students to:
+
+- Switch ON the virtual trainer.
+- Manually select digital ICs from a complete IC library.
+- Insert ICs into appropriate virtual IC sockets.
+- Connect IC pins using realistic virtual patch cords.
+- Use physical-style input switches to provide binary signals.
+- Connect outputs to onboard LED indicators.
+- Operate manual and automatic clock generators.
+- Construct circuits using the virtual breadboard.
+- Perform experiments using actual IC-level behavior.
+- Observe circuit outputs in real time.
+- Operate counters, flip-flops, multiplexers, encoders, decoders, adders and memory circuits.
+- Save and reopen their circuit configurations.
+
+The most important requirement:
+
+**The student must manually build and connect circuits just as they would in a physical laboratory. The simulator must not automatically construct or complete circuits on the student's behalf.**
+
+---
+
+# 3. IMPORTANT SCOPE RESTRICTIONS
+
+This project is specifically focused on physical-style digital electronics trainer simulation.
+
+DO NOT implement the following features in this development version:
+
+- Verilog simulation.
+- SystemVerilog simulation.
+- HDL editor.
+- Icarus Verilog.
+- Yosys.
+- Testbench execution.
+- VCD waveform viewer.
+- Oscilloscope or waveform analysis interface.
+- Separate, draggable seven-segment display modules.
+- Unnecessary cloud accounts or authentication.
+- Unnecessary social features.
+- Gaming dashboards or decorative animations.
+
+The seven-segment display must be part of the trainer hardware itself.
+
+The IC library must contain the 25 requested IC models.
+
+The LTS542 display must be represented through the onboard seven-segment hardware, not offered as a separate external accessory.
+
+Keep the architecture expandable for future capabilities, but do not implement excluded features now.
+
+---
+
+# 4. HARDWARE REFERENCE
+
+Use the user-provided photograph of the **DT-1004 Digital Circuit Trainer** as the primary physical reference.
+
+Inspect its layout and reproduce the important hardware sections faithfully.
+
+The objective is not to copy its old green-board appearance.
+
+Instead, reproduce the same hardware arrangement and functionality using a modern, professionally designed interface.
+
+The virtual trainer must include:
+
+### A. Main power section
+
+- Main power ON/OFF switch.
+- +5V supply terminals.
+- GND terminals.
+- Visible power status.
+- Clearly identifiable power connection points.
+
+The simulator must monitor IC power connections and report missing or incorrect supply connections.
+
+### B. Digital input section
+
+Provide 16 independent input switches.
+
+Each switch must have:
+
+- Unique identification.
+- HIGH state.
+- LOW state.
+- Clear physical-style toggle interaction.
+- Clearly visible current state.
+- Corresponding signal terminal.
+
+Changing a switch must immediately update the simulation.
+
+The switches must not merely change appearance. They must change the actual connected digital signal.
+
+### C. Digital output section
+
+Provide 16 individual digital output indicators.
+
+Each output should have:
+
+- LED-style visual representation.
+- Output terminal.
+- HIGH/LOW indication.
+- Actual connected signal state.
+- An identifiable floating or unknown state where applicable.
+
+Outputs must reflect signals from real simulated IC models.
+
+### D. Clock generator section
+
+Implement three clock operating modes:
+
+1. Manual clock.
+2. Automatic clock.
+3. Single-step clock.
+
+Manual clock:
+- A physical-style push button.
+- Every press creates a proper clock transition.
+- Support controlled HIGH and LOW transitions.
+- Prevent accidental duplicate pulses.
+
+Automatic clock:
+- Adjustable frequency.
+- Adjustable duty cycle.
+- Start and stop controls.
+- Stable periodic operation.
+
+Single-step:
+- Advance one clock transition at a time.
+- Allow students to inspect sequential logic behavior.
+
+Support proper positive-edge and negative-edge triggering.
+
+A JK flip-flop must not change state merely because the clock indicator changes visually. Its internal behavior must respond to the correct clock transition.
+
+### E. Pulse generator
+
+Provide an adjustable pulse generator.
+
+Include:
+- Start and stop.
+- Frequency control.
+- Pulse output terminal.
+- HIGH and LOW states.
+- Configurable duty cycle.
+
+### F. Counter section
+
+Provide the counter-related hardware/control area represented by the physical trainer.
+
+Make sure the actual counter ICs are simulated individually.
+
+Do not fake counter behavior using decorative numeric animations.
+
+### G. Integrated seven-segment display section
+
+The trainer must contain its own built-in seven-segment display panel, positioned and styled according to the supplied DT-1004 reference image.
+
+Requirements:
+
+- Reproduce the visible display units shown in the reference.
+- Realistic red LED-style seven-segment digits.
+- Common-anode behavior.
+- Appropriate exposed signal terminals.
+- Actual connection between the display segments and the simulated logic signals.
+- Correct segment activation.
+- Proper blanking and invalid BCD behavior where specified by the IC.
+- Compatibility with the onboard 7446 and 7447 driver ICs.
+
+Do not add an external display-component library.
+
+The display is fixed onboard trainer hardware, not a component students need to drag onto the breadboard.
+
+However, the student must be able to connect the decoder IC outputs to the onboard display terminals using patch cords.
+
+Use the LTS542 common-anode display characteristics as the reference for the onboard display model where appropriate.
+
+Verify the exact display pin mapping before implementing it.
+
+### H. IC socket section
+
+Reproduce the ZIF-1 and ZIF-2 socket areas visible in the reference trainer.
+
+Requirements:
+
+- Clearly visible IC sockets.
+- Correct DIP orientation.
+- Pin 1 identification.
+- Pin numbering.
+- IC insertion and removal.
+- Socket occupancy indication.
+- Support for compatible 14-pin and 16-pin ICs.
+- Proper handling of larger IC packages.
+
+Never permit an IC to be inserted into an incompatible socket merely because it looks visually appropriate.
+
+The 24-pin 6116 must be placed in a suitable DIP-24 breadboard position or compatible virtual adapter, not forced into a smaller socket.
+
+When a student selects an IC, show its package and authentic pin arrangement.
+
+### I. Breadboard
+
+Provide a large interactive solderless breadboard on the trainer.
+
+Requirements:
+
+- Correct row and column structure.
+- Centre isolation gap.
+- Power rails.
+- Proper internal connection groups.
+- Accurate hole spacing.
+- IC placement across the centre gap.
+- DIP package compatibility.
+- Individual connection points.
+- Realistic jumper cable connections.
+
+Breadboard connectivity must be based on its actual electrical connection structure, not merely the visual proximity of holes.
+
+---
+
+# 5. COMPLETE IC LIBRARY — ALL 25 MODELS REQUIRED
+
+Every IC must be separately selectable.
+
+Do not combine chips with similar names or functionality into one generic component.
+
+Each IC must have its own:
+- Part number.
+- Package information.
+- Correct pin numbering.
+- Pin names.
+- Input and output definitions.
+- Power connections.
+- Internal behavior.
+- Timing characteristics where applicable.
+- Datasheet-derived validation tests.
+
+## GROUP A — BASIC LOGIC GATES
+
+1. 7400 — Quad 2-input NAND gate — 14 pins.
+2. 7402 — Quad 2-input NOR gate — 14 pins.
+3. 7404 — Hex inverter / NOT gate — 14 pins.
+4. 7408 — Quad 2-input AND gate — 14 pins.
+5. 7410 — Triple 3-input NAND gate — 14 pins.
+6. 7420 — Dual 4-input NAND gate — 14 pins.
+7. 7427 — Triple 3-input NOR gate — 14 pins.
+8. 7432 — Quad 2-input OR gate — 14 pins.
+9. 7486 — Quad 2-input XOR gate — 14 pins.
+10. 4077 — Quad 2-input XNOR gate — 14 pins.
+
+## GROUP B — COMBINATIONAL LOGIC
+
+11. 7483 — 4-bit binary full adder — 16 pins.
+12. 7485 — 4-bit magnitude comparator — 16 pins.
+13. 74138 — 3-to-8 decoder — 16 pins.
+14. 7446 — BCD-to-seven-segment decoder/driver — 16 pins.
+15. 7447 — BCD-to-seven-segment decoder/driver — 16 pins.
+16. 74148 — 8-to-3 priority encoder — 16 pins.
+17. 74153 — Dual 4-to-1 multiplexer — 16 pins.
+18. 74139 — Dual 2-to-4 decoder / 1-to-4 demultiplexer — 16 pins.
+19. 74151 — 8-to-1 multiplexer — 16 pins.
+
+## GROUP C — SEQUENTIAL LOGIC
+
+20. 7474 — Dual D flip-flop — 14 pins.
+21. 7476 — Dual JK flip-flop — 16 pins.
+22. 7490 — Decade counter — 14 pins.
+23. 74192 — Presettable up/down decade counter — 16 pins.
+24. 7495 — 4-bit shift register — 14 pins.
+
+## GROUP D — MEMORY
+
+25. 6116 — 2K × 8 static RAM — 24 pins.
+
+### Important implementation instructions
+
+The 7446 and 7447 are separate models.
+
+The 4077 is a CMOS IC, not a TTL IC. Account for its different device characteristics and compatible supply requirements.
+
+The 6116 must have an actual 2048-byte memory model with address, data, chip-select, output-enable and write-enable behavior as specified by its datasheet.
+
+The 7490 must implement its real internal counter sections and reset arrangements.
+
+The 74192 must implement its up-count, down-count, preset and reset functionality.
+
+The 7474 and 7476 must implement their correct clock-triggering and asynchronous control behavior.
+
+The 7495 must implement its specified shift-register operation and operating modes.
+
+The 74138, 74139 and 74148 must implement their active-low enable and output behavior correctly.
+
+The 7446 and 7447 must implement their appropriate BCD decoder, control-input and display-driver behavior.
+
+**CRITICAL:** Never assume that an IC's pin numbers can be derived from the number of pins or the function of another similar IC.
+
+Use the datasheet for the exact part number and package.
+
+Where manufacturer or logic-family variants differ, keep their definitions separate rather than silently mixing pinouts or behavior.
+
+Never invent missing specifications. Record uncertainties and request datasheet confirmation when required.
+
+---
+
+# 6. PATCH CORD SYSTEM — A TOP PRIORITY
+
+This is one of the most important features of LogicBench.
+
+I do not want ordinary random straight lines connecting digital components.
+
+I want a realistic physical patch-cord system similar to an actual electronics laboratory.
+
+### Patch-cord appearance
+
+Each cable must look like an insulated physical wire with:
+
+- Visible plug terminals.
+- Circular socket insertion points.
+- Insulated cable body.
+- Distinct cable colors.
+- Natural bends.
+- Appropriate cable thickness.
+- Proper endpoint connection.
+
+Suggested cable color standards:
+
+- Red: +5V.
+- Black: GND.
+- Yellow: Digital signals.
+- Blue: Clock signals.
+- Green: Other signal connections.
+
+Allow students to select cable colors.
+
+### Patch-cord interaction
+
+The student must be able to:
+
+1. Click or pick up a cable from an available terminal.
+2. Move the cable endpoint.
+3. Attach it to another compatible terminal.
+4. Observe the plug entering the socket.
+5. Release the cable.
+6. See the completed physical-style connection.
+
+When a connection is being made:
+- Highlight available terminals.
+- Snap to valid connection points.
+- Clearly indicate incompatible connections.
+- Allow cancellation.
+- Show where the cable is connected.
+
+Once connected, the cable must remain attached to its endpoints.
+
+### Cable routing
+
+Create a proper cable-routing system.
+
+- Wires should avoid unnecessarily crossing components.
+- Curves and bends should be smooth and physically believable.
+- Cables should be movable without disconnecting their electrical endpoints.
+- Connection points should remain attached to the relevant pins.
+- Prevent wires from covering critical labels and pin numbers.
+- Allow cable removal and reconnection.
+- Add undo and redo support.
+
+### Breadboard jumper connections
+
+The breadboard must have its own realistic jumper-wire behavior.
+
+A jumper wire should connect two actual breadboard holes.
+
+It should look like a short insulated physical wire inserted into the breadboard, not an arbitrary line floating over the board.
+
+### Electrical connection rules
+
+Every cable must create an actual electrical connection in the simulation engine.
+
+Drawing a wire visually must never automatically create a connection unless both endpoints are successfully attached to valid terminals.
+
+Removing a cable must disconnect the electrical net.
+
+Moving a component must preserve its connections.
+
+Use one underlying connection model for visual wiring and simulation.
+
+---
+
+# 7. DIGITAL SIMULATION ENGINE
+
+This is the technical heart of LogicBench.
+
+Build a custom digital simulation engine in TypeScript.
+
+Do not make the application a collection of predetermined experiment results.
+
+### Logic states
+
+Support:
+
+- Logic 0.
+- Logic 1.
+- Unknown (X).
+- High impedance (Z).
+
+### Circuit execution
+
+The engine should:
+
+1. Receive input changes.
+2. Determine affected electrical nets.
+3. Resolve signals.
+4. Evaluate connected IC behavior.
+5. Process clock transitions.
+6. Update sequential logic.
+7. Calculate outputs.
+8. Update visible indicators.
+
+Use event-driven updates and simulated time.
+
+### Circuit behavior
+
+Support:
+
+- Combinational logic.
+- Sequential logic.
+- Propagation delay.
+- Positive-edge triggering.
+- Negative-edge triggering.
+- Asynchronous preset and clear.
+- Active-low controls.
+- Floating inputs.
+- Output conflicts.
+- Power validation.
+
+### Error handling
+
+Display clear engineering-oriented warnings for:
+
+- Missing power connections.
+- Missing ground connections.
+- Floating inputs.
+- Shorted outputs.
+- Conflicting signal drivers.
+- Invalid pin connections.
+- Unconnected components.
+- Incorrect display connections.
+- Invalid IC placement.
+
+Do not display arbitrary output values to conceal an invalid circuit.
+
+The simulation result must reflect the actual constructed circuit.
+
+---
+
+# 8. REALISTIC CIRCUIT-BUILDING WORKFLOW
+
+The core user experience must work like this:
+
+### Example: NAND gate experiment
+
+1. Open the trainer.
+2. Switch on the power supply.
+3. Select 7400 from the IC library.
+4. Insert 7400 into an appropriate socket.
+5. Identify pins 1 and 2 as inputs and pin 3 as output, according to the selected package's datasheet.
+6. Connect two digital input switches to pins 1 and 2 using patch cords.
+7. Connect pin 3 to a digital output indicator.
+8. Check power and ground connections.
+9. Operate the input switches.
+10. Observe the actual NAND output.
+
+The student should be able to test all four input combinations.
+
+### Example: JK flip-flop experiment
+
+1. Select 7476.
+2. Insert it into the correct socket.
+3. Connect J and K inputs.
+4. Connect the clock terminal.
+5. Connect preset and clear appropriately.
+6. Connect Q and Q-bar outputs to indicators.
+7. Operate the clock.
+8. Observe actual flip-flop transitions.
+
+### Example: 7490 counter
+
+1. Select the 7490.
+2. Insert it.
+3. Connect its power terminals.
+4. Wire the required clock and counter section connections.
+5. Connect reset pins correctly.
+6. Attach the required output lines to indicators.
+7. Trigger the clock.
+8. Observe the actual count sequence.
+
+### Example: BCD-to-seven-segment experiment
+
+1. Insert 7446 or 7447.
+2. Connect the BCD inputs.
+3. Connect the appropriate control pins.
+4. Connect output pins to the onboard seven-segment display terminals.
+5. Ensure common-anode connections are correct.
+6. Change BCD inputs.
+7. Observe the actual displayed digit.
+
+These are user workflows, not hardcoded special animations.
+
+---
+
+# 9. VISUAL DESIGN — STRICT REQUIREMENTS
+
+I strongly dislike flashy, neon-themed, gaming-style or generic AI-generated dashboard interfaces.
+
+LogicBench must look like a premium professional electronic instrumentation product.
+
+### Design philosophy
+
+Minimal.
+Precise.
+Technical.
+Realistic.
+Elegant.
+Professional.
+
+### Color palette
+
+Use a carefully balanced neutral palette.
+
+Primary graphite:
+#20252B
+
+Dark instrument panel:
+#303840
+
+Warm off-white:
+#F1F0EB
+
+Panel grey:
+#E5E5E1
+
+Muted blue accent:
+#456A83
+
+Secondary text:
+#747C82
+
+Muted green:
+#587965
+
+Warning amber:
+#BD8B43
+
+Use these colors consistently and maintain sufficient text contrast.
+
+### Visual restrictions
+
+DO NOT use:
+
+- Neon green.
+- Neon purple.
+- Pink gradients.
+- Rainbow gradients.
+- Excessive glow effects.
+- Gaming-style backgrounds.
+- Overly rounded cards everywhere.
+- Glassmorphism as the default design.
+- Decorative 3D effects.
+- Excessive animations.
+- Unnecessary icons.
+- Large marketing sections inside the laboratory.
+- AI-generated decorative components that have no functional purpose.
+
+### Typography
+
+Use a professional readable typeface.
+
+Suggested:
+- Inter or a similar professional sans-serif for interface text.
+- A restrained technical monospace font for pin numbers, component identifiers and digital readings.
+
+### Hardware appearance
+
+The trainer board should be the main visual focus.
+
+Reproduce actual:
+- Socket proportions.
+- DIP IC shapes.
+- Switches.
+- Power terminals.
+- Circular patch sockets.
+- Breadboard holes.
+- LED indicators.
+- Clock controls.
+- Display segments.
+
+Do not use random generic rectangles as substitutes for physical hardware.
+
+The visual interface should communicate how the student would actually operate the equipment.
+
+---
+
+# 10. APPLICATION STRUCTURE
+
+Create the following primary sections.
+
+### A. Main dashboard
+
+Show:
+- LogicBench identity.
+- New circuit.
+- Open project.
+- Recent projects.
+- Open virtual laboratory.
+
+Keep it minimal and functional.
+
+### B. Trainer workspace
+
+This is the primary application screen.
+
+Show the virtual trainer with:
+- Power section.
+- Inputs.
+- Outputs.
+- Clocks.
+- IC sockets.
+- Built-in display section.
+- Breadboard.
+- Patch-cord connections.
+
+The student should be able to operate the trainer directly.
+
+### C. IC library
+
+Provide a searchable library containing all 25 IC models.
+
+Organize it into:
+
+- Logic gates.
+- Combinational logic.
+- Sequential logic.
+- Memory.
+
+Show:
+- IC part number.
+- Functional description.
+- Pin count.
+- Package.
+- Pinout diagram.
+- Datasheet reference.
+- Socket compatibility.
+
+### D. Experiment laboratory
+
+Provide a framework for college experiments.
+
+Each experiment should support:
+
+- Aim.
+- Required ICs.
+- Circuit construction.
+- Pin connections.
+- Procedure.
+- Truth table.
+- Expected result.
+- Observed result.
+- Final result.
+
+Do not invent my college's experiment catalogue.
+
+The actual DDHDL manual will be supplied separately. Until then, create an extensible experiment framework and a small clearly labelled set of test examples.
+
+### E. Project manager
+
+Support:
+
+- Create project.
+- Save project.
+- Load project.
+- Auto-save.
+- Undo.
+- Redo.
+- Reset circuit.
+- Export project.
+- Import project.
+
+A saved project must preserve the exact IC placement, connections, switch states and supported experiment information.
+
+---
+
+# 11. TECHNICAL ARCHITECTURE
+
+Use a modular architecture.
+
+Recommended technology stack:
+
+Frontend:
+- React.
+- TypeScript.
+- Vite.
+
+Visual rendering:
+- SVG for accurate scalable component shapes and interaction.
+- Canvas where useful for large circuit surfaces.
+- DOM overlays for accessible controls and menus.
+
+Application state:
+- Zustand or equivalent lightweight state management.
+
+Simulation:
+- Custom TypeScript digital simulation engine.
+- Web Worker for simulation processing.
+
+Storage:
+- IndexedDB for browser projects.
+- A common portable project file format.
+
+Desktop:
+- Tauri 2.
+- Reuse the same React and TypeScript frontend.
+- Package the application for Windows after the browser version is stable.
+
+Testing:
+- Vitest for logic and simulation tests.
+- Playwright for interaction and application tests.
+
+### Suggested folder structure
+
+LogicBench/
+- apps/
+  - web/
+  - desktop/
+- packages/
+  - ui/
+  - simulation-core/
+  - circuit-model/
+  - connection-engine/
+  - ic-library/
+  - trainer-board/
+  - breadboard/
+  - patch-cords/
+  - clock-engine/
+  - display-engine/
+  - experiment-engine/
+  - project-storage/
+- data/
+  - ic-definitions/
+  - datasheet-references/
+  - board-profiles/
+  - experiment-templates/
+- tests/
+  - unit/
+  - integration/
+  - regression/
+- docs/
+  - architecture/
+  - ic-reference/
+  - user-guide/
+
+You may improve this structure when justified, but preserve the modular separation.
+
+### Important design rule
+
+The simulation engine must not depend on the user interface.
+
+The trainer visuals must not contain hardcoded circuit results.
+
+The cable system must operate through a proper underlying electrical connection model.
+
+The IC library must be independent and expandable.
+
+---
+
+# 12. DEVELOPMENT PROCESS
+
+Build the project in controlled stages.
+
+Do not generate the entire system as untested code in a single step.
+
+## Stage 1 — Foundation
+
+- Inspect the development environment.
+- Create the project repository structure.
+- Configure React, TypeScript and Vite.
+- Define project data structures.
+- Create the initial visual design system.
+- Build the main application layout.
+
+## Stage 2 — Trainer hardware
+
+- Recreate the trainer board based on the attached photograph.
+- Add power controls.
+- Add 16 inputs.
+- Add 16 output indicators.
+- Add clock and pulse controls.
+- Add integrated seven-segment display hardware.
+- Add ZIF sockets.
+- Add breadboard.
+
+## Stage 3 — IC library
+
+Implement and test all 25 IC models.
+
+Start with the basic logic ICs and progressively add combinational, sequential and memory devices.
+
+Never mark an IC as fully implemented until its pinout and behavior have been verified.
+
+## Stage 4 — Patch-cord system
+
+- Implement realistic socket endpoints.
+- Implement cable drawing and routing.
+- Implement breadboard jumper wires.
+- Implement snapping and attachment.
+- Connect cables to actual electrical nets.
+- Implement disconnection and undo/redo.
+
+## Stage 5 — Simulation engine
+
+- Implement four-state logic.
+- Implement signal resolution.
+- Implement event-driven execution.
+- Implement clock operation.
+- Implement combinational and sequential behavior.
+- Implement power and connection validation.
+- Test IC models individually.
+
+## Stage 6 — Integration
+
+Make the trainer, IC library, breadboard, patch-cord system and simulator operate together.
+
+## Stage 7 — Experiment laboratory
+
+Add experiment templates and build actual experiment workflows.
+
+## Stage 8 — Product completion
+
+- Test all major interactions.
+- Fix visual and functional bugs.
+- Implement reliable project persistence.
+- Optimize performance.
+- Complete documentation.
+- Package the web application.
+- Prepare the Windows desktop version.
+
+---
+
+# 13. QUALITY REQUIREMENTS AND ACCEPTANCE TESTS
+
+The product will not be accepted as complete merely because its interface looks correct.
+
+It must pass the following tests.
+
+### Test 1 — Basic gate
+
+- Insert a 7400.
+- Connect switches to its input pins.
+- Connect its output to an indicator.
+- Test all four input combinations.
+- Verify the NAND truth table.
+
+### Test 2 — XOR
+
+- Insert 7486.
+- Connect its inputs and outputs.
+- Verify all input combinations.
+
+### Test 3 — Flip-flop
+
+- Insert 7476 or 7474.
+- Connect clock, control and output pins.
+- Test the correct triggering edge.
+- Test preset and clear behavior.
+
+### Test 4 — Counter
+
+- Insert 7490.
+- Connect its required pins.
+- Trigger the clock.
+- Verify its actual count behavior and reset operation.
+
+### Test 5 — Display
+
+- Insert 7447.
+- Connect appropriate BCD inputs.
+- Connect the segment outputs to the onboard display.
+- Verify displayed digits and control behavior.
+
+### Test 6 — Memory
+
+- Insert 6116 in a compatible DIP-24 location.
+- Write data to different addresses.
+- Read it back.
+- Test chip selection and write enable.
+
+### Test 7 — Patch cords
+
+- Connect two actual terminals.
+- Confirm the net is electrically connected.
+- Move the cable.
+- Confirm that the connection is retained.
+- Remove the cable.
+- Confirm that the electrical connection is removed.
+
+### Test 8 — Project storage
+
+- Build a circuit.
+- Save it.
+- Close the project.
+- Reopen it.
+- Verify all ICs, connections and supported states are preserved.
+
+### Test 9 — Platform consistency
+
+- Open the same project in the web application and Windows application.
+- Confirm that the circuit structure and IC behavior are identical.
+
+### Test 10 — Engineering accuracy
+
+Test every IC against its datasheet-derived truth tables, control conditions, pin mapping and relevant clock/reset behavior.
+
+---
+
+# 14. DEVELOPMENT RULES
+
+Follow these rules throughout the entire project:
+
+1. Do not sacrifice functionality for visual appearance.
+2. Do not sacrifice visual quality for implementation speed.
+3. Never fake an IC's internal functionality.
+4. Never invent pin configurations.
+5. Never fabricate experiment results.
+6. Never use decorative wires as substitutes for real electrical connections.
+7. Never use preprogrammed outputs as substitutes for actual circuit simulation.
+8. Never make automatic circuit connections without the student's action.
+9. Keep the user interface minimal and professional.
+10. Make all important controls functional.
+11. Validate every major development stage with automated tests.
+12. Maintain clean, readable and maintainable source code.
+13. Handle simulation errors and invalid connections gracefully.
+14. Do not leave important features as nonfunctional placeholders.
+15. Do not claim a feature is complete until it has been tested.
+
+When datasheet information is unavailable, document the missing information rather than guessing.
+
+When the reference hardware photograph does not establish an exact specification, mark it for verification rather than inventing a physical detail.
+
+---
+
+# 15. EXPECTED FINAL DELIVERY
+
+The final deliverable must include:
+
+1. A fully functional LogicBench web application.
+2. A realistic virtual digital trainer.
+3. All 25 individually selectable IC models.
+4. Functional power and input/output sections.
+5. Functional manual and automatic clock controls.
+6. Realistic patch cords and breadboard wiring.
+7. Functional integrated seven-segment display panel.
+8. Accurate digital circuit simulation.
+9. Experiment laboratory framework.
+10. Project save/import/export.
+11. Responsive, minimal interface.
+12. Automated tests for the major ICs and simulator functions.
+13. Complete GitHub-ready source code.
+14. Installation and usage documentation.
+15. A Windows desktop packaging path using the shared application code.
+
+The Windows version must reuse the same simulation engine and project format as the web version.
+
+---
+
+# 16. YOUR FIRST ACTION
+
+Before writing significant amounts of code:
+
+1. Inspect the available workspace and development environment.
+2. Inspect the attached DT-1004 trainer reference photograph.
+3. Understand the project's full requirements.
+4. Establish the software architecture.
+5. Create a concise implementation checklist.
+6. Identify technical uncertainties, particularly IC pinouts and socket compatibility.
+7. Establish the initial repository structure.
+
+Then begin implementing the first functional version.
+
+Do not stop after producing a plan or a mockup.
+
+Build the actual application incrementally, run tests after each major component and resolve errors before moving forward.
+
+Your priority is to deliver a genuinely functional and realistic digital electronics laboratory.
+
+# FINAL PRODUCT VISION
+
+LogicBench should feel like a premium professional electronics laboratory instrument.
+
+A student should be able to sit in front of their laptop, open the virtual trainer, manually insert a 7400, connect patch cords, operate switches, test the truth table, replace the IC with a 7476, configure its clock and perform another experiment without leaving the application.
+
+The entire experience should feel natural, realistic, technically correct and professionally engineered.
+
+**Build the laboratory, not merely a simulator interface.**

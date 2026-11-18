@@ -1,0 +1,79 @@
+{
+  "entities": {
+    "CircuitProject": {
+      "title": "CircuitProject",
+      "description": "A user-created LogicBench DT-1004 digital trainer circuit project stored in Firestore.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique project identifier matching the document ID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the project owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schema": {
+          "type": "string",
+          "description": "Project schema version identifier.",
+          "enum": ["logicbench-project/v1"],
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable circuit project name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional summary description of the circuit.",
+          "minLength": 0,
+          "maxLength": 500
+        },
+        "circuit": {
+          "type": "object",
+          "description": "Structured DT-1004 circuit hardware snapshot (powerOn, switches, clock, pulse, placedICs, wires)."
+        },
+        "experimentNotes": {
+          "type": "object",
+          "description": "Structured map of experiment observation notes and results."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the project was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the project was last updated."
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "schema",
+        "name",
+        "description",
+        "circuit",
+        "experimentNotes",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/CircuitProject" },
+      "description": "Private per-user collection of LogicBench DT-1004 digital trainer circuit projects."
+    }
+  }
+}

@@ -1,0 +1,150 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1: Global Default-Deny Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Hardened Global Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidCircuitMap(circuit) {
+      return circuit is map
+        && circuit.keys().hasAll(['powerOn', 'switches', 'clock', 'pulse', 'placedICs', 'wires'])
+        && circuit.keys().hasOnly(['powerOn', 'switches', 'clock', 'pulse', 'placedICs', 'wires'])
+        && circuit.powerOn is bool
+        && circuit.switches is list
+        && circuit.switches.size() == 16
+        && circuit.switches[0] is int
+        && circuit.clock is map
+        && circuit.pulse is map
+        && circuit.placedICs is list
+        && circuit.placedICs.size() <= 5
+        && (circuit.placedICs.size() == 0 || circuit.placedICs[0] is map)
+        && circuit.wires is list
+        && circuit.wires.size() <= 200
+        && (circuit.wires.size() == 0 || circuit.wires[0] is map);
+    }
+
+    // Pillar 2: Validation Blueprint for CircuitProject ( synchronized with firebase-blueprint.json )
+    function isValidCircuitProject(data, userId, projectId) {
+      return data is map
+        && data.keys().hasAll([
+          'id',
+          'ownerId',
+          'schema',
+          'name',
+          'description',
+          'circuit',
+          'experimentNotes',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'ownerId',
+          'schema',
+          'name',
+          'description',
+          'circuit',
+          'experimentNotes',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.id is string
+        && data.id.size() >= 1
+        && data.id.size() <= 128
+        && data.id.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.id == projectId
+        && data.ownerId is string
+        && data.ownerId.size() >= 1
+        && data.ownerId.size() <= 128
+        && data.ownerId.matches('^[a-zA-Z0-9_\\-]+$')
+        && data.ownerId == request.auth.uid
+        && data.ownerId == userId
+        && data.schema is string
+        && data.schema.size() >= 1
+        && data.schema.size() <= 64
+        && data.schema == 'logicbench-project/v1'
+        && data.name is string
+        && data.name.size() >= 1
+        && data.name.size() <= 120
+        && data.description is string
+        && data.description.size() >= 0
+        && data.description.size() <= 500
+        && isValidCircuitMap(data.circuit)
+        && data.experimentNotes is map
+        && data.experimentNotes.size() <= 50
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Collection: /users/{userId}/projects/{projectId}
+    match /users/{userId}/projects/{projectId} {
+      allow get: if isVerified()
+        && isValidId(userId)
+        && isValidId(projectId)
+        && request.auth.uid == userId
+        && existing().ownerId == request.auth.uid;
+
+      allow list: if isVerified()
+        && request.auth.uid == userId
+        && existing().ownerId == request.auth.uid;
+
+      allow create: if isVerified()
+        && isValidId(userId)
+        && isValidId(projectId)
+        && request.auth.uid == userId
+        && isValidCircuitProject(incoming(), userId, projectId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isVerified()
+        && isValidId(userId)
+        && isValidId(projectId)
+        && request.auth.uid == userId
+        && isValidCircuitProject(incoming(), userId, projectId)
+        && existing().ownerId == request.auth.uid
+        && incoming().id == existing().id
+        && incoming().ownerId == existing().ownerId
+        && incoming().schema == existing().schema
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action 1: Save Circuit & Metadata Update
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'name',
+            'description',
+            'circuit',
+            'experimentNotes',
+            'updatedAt'
+          ])
+        );
+
+      allow delete: if isVerified()
+        && isValidId(userId)
+        && isValidId(projectId)
+        && request.auth.uid == userId
+        && existing().ownerId == request.auth.uid;
+    }
+  }
+}
