@@ -178,7 +178,6 @@ export const TrainerWorkspace: React.FC = () => {
   const redoStack = useLabStore((s) => s.redoStack);
 
   const selectedWireColor = useLabStore((s) => s.selectedWireColor);
-  const wiringFrom = useLabStore((s) => s.wiringFrom);
   const selectedWireId = useLabStore((s) => s.selectedWireId);
   const selectedWireIds = useLabStore((s) => s.selectedWireIds);
   const pendingInsertIC = useLabStore((s) => s.pendingInsertIC);
@@ -696,49 +695,34 @@ export const TrainerWorkspace: React.FC = () => {
         </div>
       </div>
 
-      {/* Contextual Status Banners (No wire selection popup so canvas never shifts during marquee drag) */}
-      {(wiringFrom || pendingInsertIC || placementError) && (
-        <div className="bg-[#303840] text-[#F1F0EB] px-4 py-1.5 text-xs flex items-center justify-between gap-4 border-b border-[#20252B] shrink-0">
-          <div className="flex items-center gap-3 font-mono">
-            {wiringFrom && (
-              <span>
-                Routing patch cord from{' '}
-                <strong>{formatTerminalDisplay(wiringFrom, circuit.placedICs)}</strong> — click
-                destination terminal or press Esc to cancel.
-              </span>
-            )}
-            {pendingInsertIC && !wiringFrom && (
-              <span>
-                Placing <strong>{pendingInsertIC}</strong> — click a compatible ZIF socket on the
-                trainer board.
-              </span>
-            )}
-            {placementError && <span className="text-[#E8A45C]">{placementError}</span>}
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => {
-                cancelWiring();
-                setPendingInsertIC(null);
-                clearPlacementError();
-              }}
-              className="p-0.5 text-[#A5ACB2] hover:text-white cursor-pointer"
-              aria-label="Dismiss active tool message"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Main Split: Trainer Canvas + Horizontally Minimizable Right Engineering Inspector */}
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col lg:flex-row">
         {/* DT-1004 Hardware Board Stage (fits full trainer kit inside viewport without scrolling) */}
         <div
           data-testid="trainer-board-stage"
-          className="flex-1 min-w-0 min-h-0 overflow-hidden p-1.5 lg:p-2 flex items-center justify-center bg-[#DFDDD6] transition-all duration-200 ease-out"
+          className="relative flex-1 min-w-0 min-h-0 overflow-hidden p-1.5 lg:p-2 flex items-center justify-center bg-[#DFDDD6] transition-all duration-200 ease-out"
         >
+          {(pendingInsertIC || placementError) && (
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 bg-[#303840] text-[#F1F0EB] px-3 py-1 rounded text-xs flex items-center gap-3 border border-[#20252B] shadow-md font-mono">
+              {pendingInsertIC && (
+                <span>
+                  Placing <strong>{pendingInsertIC}</strong> — click a compatible ZIF socket.
+                </span>
+              )}
+              {placementError && <span className="text-[#E8A45C]">{placementError}</span>}
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingInsertIC(null);
+                  clearPlacementError();
+                }}
+                className="p-0.5 text-[#A5ACB2] hover:text-white cursor-pointer"
+                aria-label="Dismiss active tool message"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
           <div
             data-testid="trainer-board-container"
             className="w-full h-full min-w-0 min-h-0 flex items-center justify-center transition-all duration-200 ease-out"
