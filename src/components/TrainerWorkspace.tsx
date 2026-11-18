@@ -460,20 +460,20 @@ export const TrainerWorkspace: React.FC = () => {
   return (
     <main className="flex-1 flex flex-col overflow-hidden bg-[#F1F0EB] text-[#20252B]">
       {/* Instrument Bench Toolbar */}
-      <div className="bg-[#E5E5E1] border-b border-[#C9C9C3] px-4 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="bg-[#E5E5E1] border-b border-[#C9C9C3] px-3 py-1.5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 shrink-0">
         {/* Project & IC Search + Insertion Controls */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap lg:flex-nowrap items-center gap-1.5 shrink-0">
           <input
             type="text"
             aria-label="Current project name"
             value={project.name}
             onChange={(e) => renameProject(e.target.value)}
-            className="px-2.5 py-1 text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] w-36 sm:w-40 focus:outline-none focus:border-[#456A83]"
+            className="px-2 py-1 text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] w-28 2xl:w-36 focus:outline-none focus:border-[#456A83]"
           />
 
-          <div className="h-5 w-px bg-[#C9C9C3]" />
+          <div className="h-4 w-px bg-[#C9C9C3] shrink-0" />
 
-          <span className="text-xs font-medium text-[#303840]">IC:</span>
+          <span className="text-xs font-medium text-[#303840] shrink-0">IC:</span>
 
           {/* Interactive IC Search Bar + Visual DIP Card Popover */}
           <div ref={icSearchContainerRef} className="relative" data-testid="ic-search-container">
@@ -482,7 +482,7 @@ export const TrainerWorkspace: React.FC = () => {
                 setIcSearchOpen(true);
                 setTimeout(() => icSearchInputRef.current?.focus(), 10);
               }}
-              className={`flex items-center gap-2 px-2.5 py-1 bg-[#F1F0EB] border rounded text-xs cursor-pointer transition-colors w-[250px] sm:w-[285px] ${
+              className={`flex items-center gap-1.5 px-2 py-1 bg-[#F1F0EB] border rounded text-xs cursor-pointer transition-colors w-[195px] xl:w-[215px] 2xl:w-[260px] ${
                 icSearchOpen
                   ? 'border-[#456A83] ring-1 ring-[#456A83]'
                   : 'border-[#B8B8B1] hover:border-[#456A83]'
@@ -607,7 +607,7 @@ export const TrainerWorkspace: React.FC = () => {
               type="button"
               disabled={!quickCompat16.ok}
               onClick={() => insertIC(quickICPart, { kind: 'zif', socketId: sockId })}
-              className="px-2 py-1 text-xs font-medium bg-[#303840] text-[#F1F0EB] rounded hover:bg-[#414B56] disabled:opacity-35 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+              className="px-1.5 2xl:px-2 py-1 text-[11px] 2xl:text-xs font-medium bg-[#303840] text-[#F1F0EB] rounded hover:bg-[#414B56] disabled:opacity-35 disabled:cursor-not-allowed whitespace-nowrap shrink-0 cursor-pointer"
             >
               + ZIF-{idx + 1}
             </button>
@@ -617,16 +617,16 @@ export const TrainerWorkspace: React.FC = () => {
             type="button"
             disabled={!quickCompat24.ok}
             onClick={() => insertIC(quickICPart, { kind: 'zif', socketId: 'ZIF5' })}
-            className="px-2.5 py-1 text-xs font-medium bg-[#456A83] text-[#F1F0EB] rounded hover:bg-[#527B96] disabled:opacity-35 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+            className="px-2 2xl:px-2.5 py-1 text-[11px] 2xl:text-xs font-medium bg-[#456A83] text-[#F1F0EB] rounded hover:bg-[#527B96] disabled:opacity-35 disabled:cursor-not-allowed whitespace-nowrap shrink-0 cursor-pointer"
           >
             + ZIF-5 (24P RAM)
           </button>
         </div>
 
         {/* Patch Cord Color & Bench Actions */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1 bg-[#F1F0EB] border border-[#C9C9C3] rounded px-2 py-1">
-            <span className="text-[11px] font-medium text-[#555C62] mr-1">Cord:</span>
+        <div className="flex flex-wrap lg:flex-nowrap items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-1 bg-[#F1F0EB] border border-[#C9C9C3] rounded px-1.5 2xl:px-2 py-0.5 2xl:py-1">
+            <span className="text-[11px] font-medium text-[#555C62] mr-0.5">Cord:</span>
             {wireColors.map((c) => {
               const active = selectedWireColor === c;
               return (
@@ -636,7 +636,7 @@ export const TrainerWorkspace: React.FC = () => {
                   title={WIRE_COLOR_HEX[c].label}
                   aria-label={`Select ${WIRE_COLOR_HEX[c].label} patch cord`}
                   onClick={() => setSelectedWireColor(c)}
-                  className={`w-4 h-4 rounded-full border transition-transform cursor-pointer ${
+                  className={`w-3.5 h-3.5 2xl:w-4 2xl:h-4 rounded-full border transition-transform cursor-pointer ${
                     active ? 'scale-115 ring-2 ring-[#456A83] border-white' : 'border-[#20252B]/40'
                   }`}
                   style={{ backgroundColor: WIRE_COLOR_HEX[c].stroke }}
@@ -651,7 +651,7 @@ export const TrainerWorkspace: React.FC = () => {
             disabled={undoStack.length === 0}
             aria-label="Undo circuit edit"
             title="Undo (Ctrl+Z)"
-            className="p-1.5 bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] disabled:opacity-40 cursor-pointer"
+            className="p-1 2xl:p-1.5 bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] disabled:opacity-40 cursor-pointer"
           >
             <Undo2 className="w-3.5 h-3.5" />
           </button>
@@ -661,7 +661,7 @@ export const TrainerWorkspace: React.FC = () => {
             disabled={redoStack.length === 0}
             aria-label="Redo circuit edit"
             title="Redo (Ctrl+Shift+Z)"
-            className="p-1.5 bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] disabled:opacity-40 cursor-pointer"
+            className="p-1 2xl:p-1.5 bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] disabled:opacity-40 cursor-pointer"
           >
             <Redo2 className="w-3.5 h-3.5" />
           </button>
@@ -670,7 +670,7 @@ export const TrainerWorkspace: React.FC = () => {
             onClick={handleExportJson}
             aria-label="Export project JSON"
             title="Export Project JSON"
-            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 2xl:px-2.5 py-1 text-[11px] 2xl:text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] whitespace-nowrap cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             Export
@@ -680,7 +680,7 @@ export const TrainerWorkspace: React.FC = () => {
             onClick={() => setShowResetConfirmModal(true)}
             aria-label="Reset trainer circuit"
             title="Reset Trainer Circuit"
-            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 2xl:px-2.5 py-1 text-[11px] 2xl:text-xs font-medium bg-[#F1F0EB] border border-[#B8B8B1] rounded text-[#20252B] hover:bg-[#DAD9D3] whitespace-nowrap cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset
@@ -688,7 +688,7 @@ export const TrainerWorkspace: React.FC = () => {
           <button
             type="button"
             onClick={() => setAdvisorOpen(true)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-[#456A83] text-[#F1F0EB] rounded hover:bg-[#527B96] whitespace-nowrap cursor-pointer"
+            className="inline-flex items-center gap-1 px-2 2xl:px-2.5 py-1 text-[11px] 2xl:text-xs font-medium bg-[#456A83] text-[#F1F0EB] rounded hover:bg-[#527B96] whitespace-nowrap cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Advisor
@@ -734,16 +734,15 @@ export const TrainerWorkspace: React.FC = () => {
 
       {/* Main Split: Trainer Canvas + Horizontally Minimizable Right Engineering Inspector */}
       <div className="flex-1 min-h-0 overflow-hidden flex flex-col lg:flex-row">
-        {/* DT-1004 Hardware Board Stage (dynamically expands to fill freed horizontal space) */}
+        {/* DT-1004 Hardware Board Stage (fits full trainer kit inside viewport without scrolling) */}
         <div
           data-testid="trainer-board-stage"
-          className="flex-1 min-w-0 min-h-0 overflow-auto p-2 lg:p-3 flex items-start justify-center bg-[#DFDDD6] transition-all duration-200 ease-out"
+          className="flex-1 min-w-0 min-h-0 overflow-hidden p-1.5 lg:p-2 flex items-center justify-center bg-[#DFDDD6] transition-all duration-200 ease-out"
         >
           <div
             data-testid="trainer-board-container"
-            className={`w-full transition-all duration-200 ease-out ${
-              inspectorCollapsed ? 'max-w-[1760px]' : 'max-w-[1440px]'
-            }`}
+            className="w-full h-full min-w-0 min-h-0 flex items-center justify-center transition-all duration-200 ease-out"
+            style={{ containerType: 'size' }}
           >
             <TrainerBoardSVG />
           </div>
@@ -757,7 +756,7 @@ export const TrainerWorkspace: React.FC = () => {
           className={`shrink-0 border-t lg:border-t-0 lg:border-l border-[#C9C9C3] flex flex-col overflow-hidden transition-all duration-200 ease-out ${
             inspectorCollapsed
               ? 'w-full h-11 lg:w-11 lg:h-full bg-[#DAD9D3]'
-              : 'w-full h-72 lg:w-80 lg:h-full bg-[#E5E5E1]'
+              : 'w-full h-72 lg:w-72 xl:w-[296px] lg:h-full bg-[#E5E5E1]'
           }`}
         >
           {inspectorCollapsed ? (
@@ -821,7 +820,7 @@ export const TrainerWorkspace: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="w-full lg:w-80 h-full flex flex-col">
+            <div className="w-full lg:w-72 xl:w-[296px] h-full flex flex-col">
             {/* Inspector Tabs + Horizontal Collapse Button */}
             <div className="flex items-center border-b border-[#C9C9C3] bg-[#DAD9D3] text-xs font-medium shrink-0">
               <div className="grid grid-cols-4 flex-1">

@@ -984,13 +984,17 @@ export const TrainerBoardSVG: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full bg-[#20252B] rounded-md border border-[#303840] p-2 select-none">
+    <div className="relative w-fit h-fit bg-[#20252B] rounded-md border border-[#303840] p-1.5 select-none">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${BOARD_WIDTH} ${BOARD_HEIGHT}`}
         shapeRendering="geometricPrecision"
         textRendering="geometricPrecision"
-        className="w-full h-auto block"
+        className="block"
+        style={{
+          width: `min(calc(100cqw - 14px), calc((100cqh - 14px) * ${BOARD_WIDTH} / ${BOARD_HEIGHT}))`,
+          height: `min(calc(100cqh - 14px), calc((100cqw - 14px) * ${BOARD_HEIGHT} / ${BOARD_WIDTH}))`,
+        }}
         onMouseDown={handleSvgMouseDown}
         onMouseMove={handleSvgMouseMove}
         onMouseUp={handleSvgMouseUp}
